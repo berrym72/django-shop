@@ -42,7 +42,7 @@ class BaseProduct(PolymorphicModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('product_detail', args=[self.slug])
+        return reverse('shop:product_detail', args=[self.slug])
 
     def get_price(self):
         """
@@ -365,7 +365,7 @@ class BaseOrder(models.Model):
         return _('Order ID: %(id)s') % {'id': self.pk}
 
     def get_absolute_url(self):
-        return reverse('order_detail', kwargs={'pk': self.pk})
+        return reverse('shop:order_detail', kwargs={'pk': self.pk})
 
     def is_paid(self):
         """Has this order been integrally paid for?"""

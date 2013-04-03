@@ -211,7 +211,7 @@ class CheckoutSelectionView(LoginMixin, ShopTemplateView):
                 # add extra info to order
                 self.save_extra_info_to_order(order, extra_info_form)
 
-                return HttpResponseRedirect(reverse('checkout_shipping'))
+                return HttpResponseRedirect(reverse('shop:checkout_shipping'))
 
         return self.get(self, *args, **kwargs)
 
@@ -270,7 +270,7 @@ class ShippingBackendRedirectView(LoginMixin, ShopView):
             backend_namespace = self.request.session.pop('shipping_backend')
             return HttpResponseRedirect(reverse(backend_namespace))
         except KeyError:
-            return HttpResponseRedirect(reverse('cart'))
+            return HttpResponseRedirect(reverse('shop:cart'))
 
 
 class PaymentBackendRedirectView(LoginMixin, ShopView):
@@ -279,4 +279,4 @@ class PaymentBackendRedirectView(LoginMixin, ShopView):
             backend_namespace = self.request.session.pop('payment_backend')
             return HttpResponseRedirect(reverse(backend_namespace))
         except KeyError:
-            return HttpResponseRedirect(reverse('cart'))
+            return HttpResponseRedirect(reverse('shop:cart'))

@@ -21,7 +21,7 @@ class MyOrderConfirmView(FormView):
         order.save()
 
     def get_success_url(self):
-        return reverse('checkout_payment')
+        return reverse('shop:checkout_payment')
 
     def get_context_data(self, **kwargs):
         ctx = super(MyOrderConfirmView, self).get_context_data(**kwargs)

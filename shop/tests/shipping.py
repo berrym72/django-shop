@@ -165,17 +165,17 @@ class FlatRateShippingTestCase(TestCase):
 
     def test_must_be_logged_in_if_setting_is_true(self):
         with SettingsOverride(SHOP_FORCE_LOGIN=True):
-            resp = self.client.get(reverse('flat'))
+            resp = self.client.get(reverse('shop:flat'))
             self.assertEqual(resp.status_code, 302)
             self.assertTrue('accounts/login/' in resp._headers['location'][1])
-            resp = self.client.get(reverse('flat_process'))
+            resp = self.client.get(reverse('shop:flat_process'))
             self.assertEqual(resp.status_code, 302)
             self.assertTrue('accounts/login/' in resp._headers['location'][1])
 
     def test_order_required_before_shipping_processed(self):
         """ See issue #84 """
         # Session only (no order)
-        response = self.client.get(reverse('flat_process'))
+        response = self.client.get(reverse('shop:flat_process'))
         self.assertEqual(response.status_code, 302)
 
         # User logged in (no order)
@@ -187,4 +187,4 @@ class FlatRateShippingTestCase(TestCase):
         setattr(order, 'user', self.user)
         order.save()
         view = self.backend.view_process_order(self.request)
-        self.assertEqual(view.get('location', None), reverse('checkout_confirm'))
+        self.assertEqual(view.get('location', None), reverse('shop:checkout_confirm'))

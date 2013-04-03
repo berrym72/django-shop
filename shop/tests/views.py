@@ -131,12 +131,12 @@ class CartViewTestCase(TestCase):
             'add_item_id': self.product.pk,
             'add_item_quantity': 1,
         }
-        return self.client.post(reverse('cart_item_add'), post)
+        return self.client.post(reverse('shop:cart_item_add'), post)
 
     def get_cart(self):
         # NOTE: it would be better to use get_or_create_cart(request)
         # dont know how to get request
-        response = self.client.get(reverse('cart'))
+        response = self.client.get(reverse('shop:cart'))
         return response.context["cart"]
 
     def assertCartHasItems(self, expected):
@@ -145,7 +145,7 @@ class CartViewTestCase(TestCase):
         self.assertEqual(count, expected)
 
     def test_cart(self):
-        response = self.client.get(reverse('cart'))
+        response = self.client.get(reverse('shop:cart'))
         self.assertEqual(response.status_code, 200)
 
     def test_cart_item_add(self):
@@ -156,7 +156,7 @@ class CartViewTestCase(TestCase):
     def test_cart_delete(self):
         self.add_product_to_cart(self.product)
 
-        url = reverse('cart_delete')
+        url = reverse('shop:cart_delete')
         response = self.client.post(url, {})
         self.assertEqual(response.status_code, 302)
         self.assertCartHasItems(0)
@@ -181,7 +181,7 @@ class CartViewTestCase(TestCase):
 
         cart = self.get_cart()
         cart_item_id = cart.items.all()[0].pk
-        url = reverse('cart_item', kwargs={'id': cart_item_id})
+        url = reverse('shop:cart_item', kwargs={'id': cart_item_id})
         post = {'item_quantity': '5', }
         response = self.client.post(url, post,
                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -194,14 +194,14 @@ class CartViewTestCase(TestCase):
         cart = self.get_cart()
         cart_item_id = cart.items.all()[0].pk
         cart_item_id = "1"
-        url = reverse('cart_item', kwargs={'id': cart_item_id})
+        url = reverse('shop:cart_item', kwargs={'id': cart_item_id})
         response = self.client.delete(url,
                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertCartHasItems(0)
 
     def test_no_creating_empty_cart(self):
-        response = self.client.get(reverse('cart'))
+        response = self.client.get(reverse('shop:cart'))
         cart = response.context['cart']
         self.assertIsNone(cart.pk)
 
@@ -215,7 +215,7 @@ class OrderListViewTestCase(TestCase):
         self.order = Order.objects.create(user=self.user)
 
     def test_anonymous_user_redirected_to_login(self):
-        url = reverse('order_list')
+        url = reverse('shop:order_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         redirect_url = '%s?next=%s' % (settings.LOGIN_URL, url)
@@ -223,14 +223,14 @@ class OrderListViewTestCase(TestCase):
 
     def test_authenticated_user_see_order_list(self):
         self.client.login(username='test', password='test')
-        url = reverse('order_list')
+        url = reverse('shop:order_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, unicode(self.order))
 
     def test_authenticated_user_see_order_detail(self):
         self.client.login(username='test', password='test')
-        url = reverse('order_detail', kwargs={'pk': self.order.pk})
+        url = reverse('shop:order_detail', kwargs={'pk': self.order.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, unicode(self.order))

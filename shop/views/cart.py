@@ -73,7 +73,7 @@ class CartItemDetail(ShopView):
         if self.request.is_ajax():
             return HttpResponse('Ok<br />')
         else:
-            return HttpResponseRedirect(reverse('cart'))
+            return HttpResponseRedirect(reverse('shop:cart'))
 
     def post_success(self, product, cart_item):
         """

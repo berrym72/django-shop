@@ -143,14 +143,14 @@ class ShippingBillingViewTestCase(TestCase):
             # force creating of session
             # https://code.djangoproject.com/ticket/11475
             self.client.cookies[settings.SESSION_COOKIE_NAME] = '1'
-            self.client.get(reverse('shop_welcome'))
+            self.client.get(reverse('shop:shop_welcome'))
 
             # save a non-empty cart in the session
             session = self.client.session
             session['cart_id'] = self.cart.pk
             session.save()
 
-            resp = self.client.get(reverse('checkout_selection'))
+            resp = self.client.get(reverse('shop:checkout_selection'))
             self.assertEqual(resp.status_code, 302)
             self.assertTrue('accounts/login/' in resp._headers['location'][1])
 
@@ -158,7 +158,7 @@ class ShippingBillingViewTestCase(TestCase):
     # Cart Required Decorator
     #==========================================================================
     def test_cart_required_redirects_on_checkout(self):
-        resp = self.client.get(reverse('checkout_selection'))
+        resp = self.client.get(reverse('shop:checkout_selection'))
         self.assertEqual(resp.status_code, 302)
         self.assertEqual('http://testserver/shop/cart/', resp._headers['location'][1])
 

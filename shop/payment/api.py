@@ -74,11 +74,11 @@ class PaymentAPI(ShopAPI):
         of an Instant Payment Notification, and later this function is called 
         when the user is directed back from PayPal.
         """
-        return reverse('thank_you_for_your_order')
+        return reverse('shop:thank_you_for_your_order')
 
     def get_cancel_url(self):
         """
         A helper for backends to let them redirect to a generic "order was
         cancelled" URL of their choosing.
         """
-        return reverse('checkout_payment')
+        return reverse('shop:checkout_payment')

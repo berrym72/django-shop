@@ -194,14 +194,14 @@ class PayOnDeliveryTestCase(TestCase):
 
     def test02_must_be_logged_in_if_setting_is_true(self):
         with SettingsOverride(SHOP_FORCE_LOGIN=True):
-            resp = self.client.get(reverse('pay-on-delivery'))
+            resp = self.client.get(reverse('shop:pay-on-delivery'))
             self.assertEqual(resp.status_code, 302)
             self.assertTrue('accounts/login/' in resp._headers['location'][1])
 
     def test_order_required_before_payment(self):
         """ See issue #84 """
         # Session only (no order)
-        response = self.client.get(reverse('pay-on-delivery'))
+        response = self.client.get(reverse('shop:pay-on-delivery'))
         self.assertEqual(302, response.status_code)
         self.assertEqual('http://testserver/shop/cart/', response._headers['location'][1])
 
@@ -211,7 +211,7 @@ class PayOnDeliveryTestCase(TestCase):
         User.objects.create_user(username=username, password=pw, email='test@example.com')
         logged_in = self.client.login(username=username, password=pw)
         self.assertTrue(logged_in)
-        response = self.client.get(reverse('pay-on-delivery'))
+        response = self.client.get(reverse('shop:pay-on-delivery'))
         self.assertEqual(302, response.status_code)
         self.assertEqual('http://testserver/shop/cart/', response._headers['location'][1])
         self.client.logout()
@@ -221,5 +221,5 @@ class PayOnDeliveryTestCase(TestCase):
         self.user.save()
         logged_in = self.client.login(username=self.user.username, password='blah')
         self.assertTrue(logged_in)
-        response = self.client.get(reverse('pay-on-delivery'))
-        self.assertTrue(reverse('thank_you_for_your_order') in response._headers['location'][1])
+        response = self.client.get(reverse('shop:pay-on-delivery'))
+        self.assertTrue(reverse('shop:thank_you_for_your_order') in response._headers['location'][1])
