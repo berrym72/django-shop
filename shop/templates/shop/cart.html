@@ -59,13 +59,13 @@
         <p><input type="submit" value="{% trans "Update Shopping Cart" %}"/></p>
       </form>
 
-      <form action="{% url 'cart_delete' %}" method="post">
+      <form action="{% url 'shop:cart_delete' %}" method="post">
         {% csrf_token %}
         <p><input type="submit" value="{% trans "Empty Shopping Cart" %}"/></p>
       </form>
 
       <p>
-        <a href="{% url 'checkout_selection' %}">{% trans "Proceed to checkout" %}</a>
+        <a href="{% url 'shop:checkout_selection' %}">{% trans "Proceed to checkout" %}</a>
       </p>
 
   {% else %}
